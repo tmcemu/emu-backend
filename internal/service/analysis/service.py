@@ -22,7 +22,6 @@ class AnalysisService(interface.IAnalysisService):
     async def create_analysis(
             self,
             nurse_id: int,
-            patient_full_name: str,
             analysis_type: str,
             study_file: UploadFile,
             activity_diary_image: UploadFile | None,
@@ -40,7 +39,6 @@ class AnalysisService(interface.IAnalysisService):
             activity_diary_fid = diary_result.fid
 
         analysis_id = await self.analysis_repo.create_analysis(
-            patient_full_name=patient_full_name,
             nurse_id=nurse_id,
             analysis_type=analysis_type,
             study_file_fid=study_file_fid,

@@ -16,14 +16,12 @@ class AnalysisRepo(interface.IAnalysisRepo):
     @traced_method()
     async def create_analysis(
         self,
-        patient_full_name: str,
         nurse_id: int,
         analysis_type: str,
         study_file_fid: str,
         activity_diary_image_fid: str | None,
     ) -> int:
         args = {
-            "patient_full_name": patient_full_name,
             "nurse_id": nurse_id,
             "analysis_type": analysis_type,
             "study_file_fid": study_file_fid,

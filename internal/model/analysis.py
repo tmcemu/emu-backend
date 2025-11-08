@@ -15,7 +15,6 @@ class Analysis:
     status: str
     conclusion_file_fid: str
     rejection_comment: str
-    patient_full_name: str
 
     started_at: datetime | None
     finished_at: datetime | None
@@ -35,7 +34,6 @@ class Analysis:
                 status=row.status,
                 conclusion_file_fid=row.conclusion_file_fid,
                 rejection_comment=row.rejection_comment,
-                patient_full_name=row.patient_full_name,
                 started_at=row.started_at,
                 finished_at=row.finished_at,
                 created_at=row.created_at,
@@ -55,7 +53,6 @@ class Analysis:
             "status": self.status,
             "conclusion_file_fid": self.conclusion_file_fid,
             "rejection_comment": self.rejection_comment,
-            "patient_full_name": self.patient_full_name,
             "started_at": self.started_at.isoformat() if self.started_at else None,
             "finished_at": self.finished_at.isoformat() if self.finished_at else None,
             "created_at": self.created_at.isoformat(),

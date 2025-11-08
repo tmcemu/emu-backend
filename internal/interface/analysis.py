@@ -16,7 +16,6 @@ class IAnalysisController(Protocol):
     async def create_analysis(
             self,
             request: Request,
-            patient_full_name: str = Form(...),
             analysis_type: str = Form(...),
             study_file: UploadFile = Form(...),
             activity_diary_image: UploadFile | None = Form(None),
@@ -54,7 +53,6 @@ class IAnalysisService(Protocol):
     async def create_analysis(
             self,
             nurse_id: int,
-            patient_full_name: str,
             analysis_type: str,
             study_file: UploadFile,
             activity_diary_image: UploadFile | None,
@@ -86,7 +84,6 @@ class IAnalysisRepo(Protocol):
     @abstractmethod
     async def create_analysis(
             self,
-            patient_full_name: str,
             nurse_id: int,
             analysis_type: str,
             study_file_fid: str,

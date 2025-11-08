@@ -25,7 +25,6 @@ class AnalysisController(interface.IAnalysisController):
     async def create_analysis(
             self,
             request: Request,
-            patient_full_name: str = Form(...),
             analysis_type: str = Form(...),
             study_file: UploadFile = Form(...),
             activity_diary_image: UploadFile | None = Form(None),
@@ -42,7 +41,6 @@ class AnalysisController(interface.IAnalysisController):
 
         analysis_id = await self.analysis_service.create_analysis(
             nurse_id=account_id,
-            patient_full_name=patient_full_name,
             analysis_type=analysis_type,
             study_file=study_file,
             activity_diary_image=activity_diary_image,

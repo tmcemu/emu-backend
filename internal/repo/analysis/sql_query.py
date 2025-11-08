@@ -1,6 +1,5 @@
 create_analysis = """
 INSERT INTO analyses (
-    patient_full_name,
     nurse_id,
     analysis_type,
     study_file_fid,
@@ -15,7 +14,6 @@ INSERT INTO analyses (
     updated_at
 )
 VALUES (
-    :patient_full_name,
     :nurse_id,
     :analysis_type,
     :study_file_fid,

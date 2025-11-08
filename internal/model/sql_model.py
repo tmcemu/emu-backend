@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS analyses (
     status TEXT NOT NULL,
     conclusion_file_fid TEXT DEFAULT '',
     rejection_comment TEXT DEFAULT '',
-    patient_full_name TEXT NOT NULL,
 
     started_at TIMESTAMP,
     finished_at TIMESTAMP,
