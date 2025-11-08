@@ -1,8 +1,5 @@
-import io
-
 import bcrypt
 import pyotp
-import qrcode
 
 from internal import common, interface, model
 from pkg.trace_wrapper import traced_method
@@ -10,11 +7,11 @@ from pkg.trace_wrapper import traced_method
 
 class AccountService(interface.IAccountService):
     def __init__(
-        self,
-        tel: interface.ITelemetry,
-        account_repo: interface.IAccountRepo,
-        emu_authorization_client: interface.IEmuAuthorizationClient,
-        password_secret_key: str,
+            self,
+            tel: interface.ITelemetry,
+            account_repo: interface.IAccountRepo,
+            emu_authorization_client: interface.IEmuAuthorizationClient,
+            password_secret_key: str,
     ):
         self.tracer = tel.tracer()
         self.logger = tel.logger()
@@ -31,6 +28,7 @@ class AccountService(interface.IAccountService):
 
         return model.AuthorizationDataDTO(
             account_id=account_id,
+            account_type=account_type,
             access_token=jwt_token.access_token,
             refresh_token=jwt_token.refresh_token,
         )

@@ -17,14 +17,14 @@ class EmuAuthorizationClient(interface.IEmuAuthorizationClient):
     ):
         logger = tel.logger()
         self.client = AsyncHTTPClient(
-            host, port, prefix="/api/authorization", use_tracing=True, logger=logger, log_context=log_context
+            host, port, prefix="/api/backend", use_tracing=True, logger=logger, log_context=log_context
         )
         self.tracer = tel.tracer()
 
     @traced_method(SpanKind.CLIENT)
     async def authorization(self, account_id: int, account_type: str) -> model.JWTTokens:
         body = {"account_id": account_id, "account_type": account_type}
-        response = await self.client.post("", json=body)
+        response = await self.client.post("/authorization", json=body)
         json_response = response.json()
 
         return model.JWTTokens(**json_response)
@@ -32,7 +32,7 @@ class EmuAuthorizationClient(interface.IEmuAuthorizationClient):
     @traced_method(SpanKind.CLIENT)
     async def check_authorization(self, access_token: str) -> model.AuthorizationData:
         cookies = {"Access-Token": access_token}
-        response = await self.client.get("/check", cookies=cookies)
+        response = await self.client.get("/check-authorization", cookies=cookies)
         json_response = response.json()
 
         return model.AuthorizationData(**json_response)

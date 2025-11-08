@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     login TEXT NOT NULL,
     password TEXT NOT NULL,
     refresh_token TEXT DEFAULT '',
+    account_type TEXT DEFAULT '',
     
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
