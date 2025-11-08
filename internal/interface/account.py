@@ -7,12 +7,8 @@ from fastapi import Request
 from internal import model
 from internal.controller.http.handler.account.model import (
     ChangePasswordBody,
-    DeleteTwoFaBody,
     LoginBody,
-    RecoveryPasswordBody,
     RegisterBody,
-    SetTwoFaBody,
-    VerifyTwoFaBody,
 )
 
 

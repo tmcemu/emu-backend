@@ -7,6 +7,8 @@ from fastapi import FastAPI
 from opentelemetry.metrics import Meter
 from opentelemetry.trace import Tracer
 
+from internal import model
+
 
 class IOtelLogger(Protocol):
     @abstractmethod

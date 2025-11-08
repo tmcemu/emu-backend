@@ -50,7 +50,10 @@ class AccountController(interface.IAccountController):
     async def login(self, body: LoginBody) -> JSONResponse:
         authorization_data = await self.account_service.login(login=body.login, password=body.password)
 
-        response = JSONResponse(status_code=200, content={"account_id": authorization_data.account_id})
+        response = JSONResponse(status_code=200, content={
+            "account_id": authorization_data.account_id,
+            "account_type": authorization_data.account_type
+        })
 
         response.set_cookie(
             key="Access-Token", value=authorization_data.access_token, httponly=True, secure=True, samesite="lax"

@@ -5,19 +5,19 @@ class Config:
     def __init__(self):
         # Основные настройки приложения
         self.environment = os.getenv("ENVIRONMENT", "dev")
-        self.service_name = os.getenv("EMU_ACCOUNT_CONTAINER_NAME", "emu-account")
-        self.http_port = os.getenv("EMU_ACCOUNT_PORT", "8000")
+        self.service_name = os.getenv("EMU_BACKEND_CONTAINER_NAME", "emu-backend")
+        self.http_port = os.getenv("EMU_BACKEND_PORT", "8000")
         self.service_version = os.getenv("SERVICE_VERSION", "1.0.0")
         self.root_path = os.getenv("ROOT_PATH", "/")
-        self.prefix = os.getenv("EMU_ACCOUNT_PREFIX", "/api/account")
+        self.prefix = os.getenv("EMU_BACKEND_PREFIX", "/api/account")
         self.log_level = os.getenv("LOG_LEVEL", "INFO")
 
         # Настройки базы данных
-        self.db_host = os.getenv("EMU_ACCOUNT_POSTGRES_CONTAINER_NAME", "localhost")
+        self.db_host = os.getenv("EMU_BACKEND_POSTGRES_CONTAINER_NAME", "localhost")
         self.db_port = "5432"
-        self.db_name = os.getenv("EMU_ACCOUNT_POSTGRES_DB_NAME", "hr_interview")
-        self.db_user = os.getenv("EMU_ACCOUNT_POSTGRES_USER", "postgres")
-        self.db_pass = os.getenv("EMU_ACCOUNT_POSTGRES_PASSWORD", "password")
+        self.db_name = os.getenv("EMU_BACKEND_POSTGRES_DB_NAME", "hr_interview")
+        self.db_user = os.getenv("EMU_BACKEND_POSTGRES_USER", "postgres")
+        self.db_pass = os.getenv("EMU_BACKEND_POSTGRES_PASSWORD", "password")
 
         # Настройки мониторинга и алертов
         self.alert_tg_bot_token = os.getenv("EMU_ALERT_TG_BOT_TOKEN", "")

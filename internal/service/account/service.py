@@ -53,6 +53,7 @@ class AccountService(interface.IAccountService):
 
         return model.AuthorizationDataDTO(
             account_id=account.id,
+            account_type=account.account_type,
             access_token=jwt_token.access_token,
             refresh_token=jwt_token.refresh_token,
         )

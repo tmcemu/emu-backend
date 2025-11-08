@@ -6,6 +6,7 @@ from pydantic import BaseModel
 @dataclass
 class AuthorizationDataDTO:
     account_id: int
+    account_type: str
     access_token: str
     refresh_token: str
 
