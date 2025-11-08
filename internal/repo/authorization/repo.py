@@ -4,7 +4,7 @@ from internal import model, interface
 from pkg.trace_wrapper import traced_method
 
 
-class AccountRepo(interface.IAuthorizationRepo):
+class AuthorizationRepo(interface.IAuthorizationRepo):
     def __init__(self, tel: interface.ITelemetry, db: interface.IDB):
         self.db = db
         self.tracer = tel.tracer()

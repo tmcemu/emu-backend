@@ -4,13 +4,20 @@ import uvicorn
 
 from infrastructure.pg.pg import PG
 from infrastructure.telemetry.telemetry import AlertManager, Telemetry
+from infrastructure.weedfs.weedfs import AsyncWeed
 from internal.app.http.app import NewHTTP
 from internal.config.config import Config
 from internal.controller.http.handler.account.handler import AccountController
+from internal.controller.http.handler.analysis.handler import AnalysisController
+from internal.controller.http.handler.authorization.handler import AuthorizationController
 from internal.controller.http.middlerware.middleware import HttpMiddleware
 from internal.repo.account.repo import AccountRepo
+from internal.repo.analysis.repo import AnalysisRepo
+from internal.repo.authorization.repo import AuthorizationRepo
 from internal.service.account.service import AccountService
-from pkg.client.internal.loom_authorization.client import LoomAuthorizationClient
+from internal.service.analysis.service import AnalysisService
+from internal.service.authorization.service import AuthorizationService
+from pkg.client.internal.emu_authorization.client import EmuAuthorizationClient
 
 cfg = Config()
 
@@ -43,34 +50,53 @@ tel = Telemetry(
 # Инициализация клиентов
 db = PG(tel, cfg.db_user, cfg.db_pass, cfg.db_host, cfg.db_port, cfg.db_name)
 
-# Инициализация клиентов
-loom_authorization_client = LoomAuthorizationClient(
+emu_authorization_client = EmuAuthorizationClient(
     tel=tel,
-    host=cfg.loom_authorization_host,
-    port=cfg.loom_authorization_port,
+    host=cfg.emu_authorization_host,
+    port=cfg.emu_authorization_port,
     log_context=log_context,
 )
 
+storage = AsyncWeed(cfg.weedfs_host, cfg.weedfs_port)
+
 # Инициализация репозиториев
 account_repo = AccountRepo(tel, db)
+authorization_repo = AuthorizationRepo(tel, db)
+analysis_repo = AnalysisRepo(tel, db)
 
 # Инициализация сервисов
 account_service = AccountService(
     tel=tel,
     account_repo=account_repo,
-    loom_authorization_client=loom_authorization_client,
+    emu_authorization_client=emu_authorization_client,
     password_secret_key=cfg.password_secret_key,
+)
+
+authorization_service = AuthorizationService(
+    tel=tel,
+    authorization_repo=authorization_repo,
+    jwt_secret_key=cfg.jwt_secret_key,
+)
+
+analysis_service = AnalysisService(
+    tel=tel,
+    analysis_repo=analysis_repo,
+    storage=storage,
 )
 
 # Инициализация контроллеров
 account_controller = AccountController(tel, account_service)
+authorization_controller = AuthorizationController(tel, authorization_service, cfg.prefix)
+analysis_controller = AnalysisController(tel, analysis_service)
 
 # Инициализация middleware
-http_middleware = HttpMiddleware(tel, loom_authorization_client, cfg.prefix, log_context)
+http_middleware = HttpMiddleware(tel, emu_authorization_client, cfg.prefix, log_context)
 
 app = NewHTTP(
     db=db,
     account_controller=account_controller,
+    authorization_controller=authorization_controller,
+    analysis_controller=analysis_controller,
     http_middleware=http_middleware,
     prefix=cfg.prefix,
 )

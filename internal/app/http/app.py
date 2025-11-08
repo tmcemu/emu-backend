@@ -1,5 +1,4 @@
 from fastapi import FastAPI
-from starlette.responses import StreamingResponse
 
 from internal import interface, model
 
@@ -7,6 +6,8 @@ from internal import interface, model
 def NewHTTP(
     db: interface.IDB,
     account_controller: interface.IAccountController,
+    authorization_controller: interface.IAuthorizationController,
+    analysis_controller: interface.IAnalysisController,
     http_middleware: interface.IHttpMiddleware,
     prefix: str,
 ):
@@ -19,6 +20,8 @@ def NewHTTP(
     include_db_handler(app, db, prefix)
 
     include_account_handlers(app, account_controller, prefix)
+    include_authorization_handlers(app, authorization_controller, prefix)
+    include_analysis_handlers(app, analysis_controller, prefix)
 
     return app
 
@@ -49,53 +52,92 @@ def include_account_handlers(app: FastAPI, account_controller: interface.IAccoun
         tags=["Account"],
     )
 
-    # Генерация 2FA QR кода
-    app.add_api_route(
-        prefix + "/2fa/generate",
-        account_controller.generate_two_fa,
-        methods=["GET"],
-        tags=["Account"],
-        response_class=StreamingResponse,
-    )
-
-    # Установка 2FA
-    app.add_api_route(
-        prefix + "/2fa/set",
-        account_controller.set_two_fa,
-        methods=["POST"],
-        tags=["Account"],
-    )
-
-    # Удаление 2FA
-    app.add_api_route(
-        prefix + "/2fa/delete",
-        account_controller.delete_two_fa,
-        methods=["DELETE"],
-        tags=["Account"],
-    )
-
-    # Верификация 2FA
-    app.add_api_route(
-        prefix + "/2fa/verify",
-        account_controller.verify_two_fa,
-        methods=["POST"],
-        tags=["Account"],
-    )
-
-    # Восстановление пароля
-    app.add_api_route(
-        prefix + "/password/recovery",
-        account_controller.recovery_password,
-        methods=["POST"],
-        tags=["Account"],
-    )
-
     # Изменение пароля
     app.add_api_route(
         prefix + "/password/change",
         account_controller.change_password,
         methods=["PUT"],
         tags=["Account"],
+    )
+
+
+def include_authorization_handlers(
+    app: FastAPI, authorization_controller: interface.IAuthorizationController, prefix: str
+):
+    # Создание токенов авторизации
+    app.add_api_route(
+        prefix + "/authorization",
+        authorization_controller.authorization,
+        methods=["POST"],
+        tags=["Authorization"],
+    )
+
+    # Проверка токена авторизации
+    app.add_api_route(
+        prefix + "/check-authorization",
+        authorization_controller.check_authorization,
+        methods=["GET"],
+        tags=["Authorization"],
+    )
+
+    # Обновление токена
+    app.add_api_route(
+        prefix + "/refresh-token",
+        authorization_controller.refresh_token,
+        methods=["POST"],
+        tags=["Authorization"],
+    )
+
+
+def include_analysis_handlers(
+    app: FastAPI, analysis_controller: interface.IAnalysisController, prefix: str
+):
+    # Создание анализа (медсестры)
+    app.add_api_route(
+        prefix + "/analysis/create",
+        analysis_controller.create_analysis,
+        methods=["POST"],
+        tags=["Analysis"],
+    )
+
+    # Взять анализ на рассмотрение (врачи)
+    app.add_api_route(
+        prefix + "/analysis/take",
+        analysis_controller.take_analysis,
+        methods=["POST"],
+        tags=["Analysis"],
+    )
+
+    # Отклонить анализ (врачи)
+    app.add_api_route(
+        prefix + "/analysis/reject",
+        analysis_controller.reject_analysis,
+        methods=["POST"],
+        tags=["Analysis"],
+    )
+
+    # Завершить анализ (врачи)
+    app.add_api_route(
+        prefix + "/analysis/complete",
+        analysis_controller.complete_analysis,
+        methods=["POST"],
+        tags=["Analysis"],
+    )
+
+    # Получить все анализы (врачи)
+    app.add_api_route(
+        prefix + "/analysis/all",
+        analysis_controller.get_all_analyses,
+        methods=["GET"],
+        tags=["Analysis"],
+    )
+
+    # Получить анализы медсестры (медсестры)
+    app.add_api_route(
+        prefix + "/analysis/nurse",
+        analysis_controller.get_analyses_by_nurse,
+        methods=["GET"],
+        tags=["Analysis"],
     )
 
 

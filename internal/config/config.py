@@ -38,3 +38,10 @@ class Config:
         self.emu_authorization_host = os.getenv("EMU_AUTHORIZATION_CONTAINER_NAME", "emu-authorization-postgres")
         self.emu_authorization_port = os.getenv("EMU_AUTHORIZATION_PORT", "8001")
         self.password_secret_key = os.getenv("EMU_PASSWORD_SECRET_KEY", "default-secret-key-change-me")
+
+        # Настройки JWT
+        self.jwt_secret_key = os.getenv("EMU_JWT_SECRET_KEY", "default-jwt-secret-key-change-me")
+
+        # Настройки WeedFS (для хранения файлов)
+        self.weedfs_host = os.getenv("EMU_WEEDFS_CONTAINER_NAME", "localhost")
+        self.weedfs_port = os.getenv("EMU_WEEDFS_PORT", "9333")

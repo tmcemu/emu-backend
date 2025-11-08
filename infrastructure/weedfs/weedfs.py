@@ -1,7 +1,6 @@
 import io
 import asyncio
 from typing import Optional, Tuple
-from dataclasses import dataclass
 
 import aiohttp
 from aiohttp import ClientSession
