@@ -102,7 +102,7 @@ update_git_branch() {
     log INFO "Обновление ветки $BRANCH_NAME"
     echo "─────────────────────────────────────────"
 
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
     log DEBUG "Рабочая директория: $(pwd)"
 
     # Информация о репозитории
@@ -249,7 +249,7 @@ build_and_start_container() {
     log INFO "Сборка и запуск контейнера"
     echo "─────────────────────────────────────────"
 
-    cd loom/$SYSTEM_REPO
+    cd emu/$SYSTEM_REPO
     log DEBUG "Рабочая директория: $(pwd)"
 
     # Проверка наличия env файлов
@@ -364,7 +364,7 @@ check_health() {
 send_telegram_notification() {
     local message=$1
 
-    cd loom/$SYSTEM_REPO
+    cd emu/$SYSTEM_REPO
     export $(cat env/.env.app env/.env.db env/.env.monitoring | xargs)
     # Проверяем наличие скрипта уведомлений
     if [ ! -f "script/tg_bot_alert.py" ]; then
@@ -535,7 +535,7 @@ main() {
         echo "Статус:         УСПЕШНО"
         echo "Ветка:          $BRANCH_NAME"
         echo "Автор:          $AUTHOR_NAME"
-        echo "Commit:         $(cd loom/$SERVICE_NAME && git rev-parse HEAD)"
+        echo "Commit:         $(cd emu/$SERVICE_NAME && git rev-parse HEAD)"
         echo "========================================"
         echo ""
         echo "=== SYSTEM INFO ==="

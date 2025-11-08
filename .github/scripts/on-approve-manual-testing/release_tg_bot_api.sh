@@ -62,7 +62,7 @@ start_deploy() {
         "github_action_link": "'"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"'"
     }' | tr -d '\n' | sed 's/  */ /g')
 
-    local endpoint="${PROD_DOMAIN}${LOOM_RELEASE_TG_BOT_PREFIX}/release"
+    local endpoint="${PROD_DOMAIN}${EMU_RELEASE_TG_BOT_PREFIX}/release"
 
     echo "─────────────────────────────────────────"
     echo "Обновление статуса на 'deploying'"
@@ -121,7 +121,7 @@ update_release_status() {
         "status": "'"$new_status"'"
     }' | tr -d '\n' | sed 's/  */ /g')
 
-    local endpoint="${PROD_DOMAIN}${LOOM_RELEASE_TG_BOT_PREFIX}/release"
+    local endpoint="${PROD_DOMAIN}${EMU_RELEASE_TG_BOT_PREFIX}/release"
 
     echo -n "📡 Отправка PATCH запроса... "
 

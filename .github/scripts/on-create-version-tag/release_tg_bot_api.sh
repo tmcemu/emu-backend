@@ -58,7 +58,7 @@ create_release_record() {
         "github_ref": "'"$GITHUB_REF"'"
     }' | tr -d '\n' | sed 's/  */ /g')
 
-    local endpoint="${PROD_DOMAIN}${LOOM_RELEASE_TG_BOT_PREFIX}/release"
+    local endpoint="${PROD_DOMAIN}${EMU_RELEASE_TG_BOT_PREFIX}/release"
 
     echo -n "📡 Отправка запроса... "
     local response=$(api_request "POST" "$endpoint" "$payload" 201)
@@ -115,7 +115,7 @@ update_release_status() {
         "status": "'"$new_status"'"
     }' | tr -d '\n' | sed 's/  */ /g')
 
-    local endpoint="${PROD_DOMAIN}${LOOM_RELEASE_TG_BOT_PREFIX}/release"
+    local endpoint="${PROD_DOMAIN}${EMU_RELEASE_TG_BOT_PREFIX}/release"
 
     echo -n "📡 Отправка PATCH запроса... "
 

@@ -25,7 +25,7 @@ deploy_to_server() {
         SERVICE_PREFIX="$SERVICE_PREFIX" \
         PROD_DOMAIN="$PROD_DOMAIN" \
         RELEASE_ID="$RELEASE_ID" \
-        LOOM_RELEASE_TG_BOT_PREFIX="$LOOM_RELEASE_TG_BOT_PREFIX" \
+        EMU_RELEASE_TG_BOT_PREFIX="$EMU_RELEASE_TG_BOT_PREFIX" \
         bash << 'EOFMAIN'
 set -e
 
@@ -92,7 +92,7 @@ update_release_status_internal() {
         "status": "'"$new_status"'"
     }' | tr -d '\n' | sed 's/  */ /g')
 
-    local endpoint="${PROD_DOMAIN}${LOOM_RELEASE_TG_BOT_PREFIX}/release"
+    local endpoint="${PROD_DOMAIN}${EMU_RELEASE_TG_BOT_PREFIX}/release"
 
     local response=$(curl -s -w "\n%{http_code}" -X PATCH \
         -H "Content-Type: application/json" \
@@ -116,7 +116,7 @@ update_release_status_internal() {
 save_previous_tag() {
     echo ""
     log INFO "Сохранение текущей версии для отката"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local previous_tag=$(git describe --tags --exact-match 2>/dev/null || echo "")
 
@@ -134,7 +134,7 @@ save_previous_tag() {
 update_repository() {
     echo ""
     log INFO "Обновление репозитория"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local current_ref=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD)
     log INFO "Текущее состояние: $current_ref"
@@ -166,7 +166,7 @@ update_repository() {
 checkout_tag() {
     echo ""
     log INFO "Переключение на версию $TAG_NAME"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     if git checkout $TAG_NAME >> "$LOG_FILE" 2>&1; then
         log SUCCESS "Переключено на $TAG_NAME"
@@ -181,7 +181,7 @@ checkout_tag() {
 cleanup_branches() {
     echo ""
     log INFO "Очистка старых веток"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local branches_deleted=$(git for-each-ref --format='%(refname:short)' refs/heads | \
         grep -v -E "^(main|master)$" | wc -l)
@@ -206,7 +206,7 @@ cleanup_branches() {
 run_migrations() {
     echo ""
     log INFO "Запуск миграций базы данных"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     # Создаем временный файл для вывода миграций
     local migration_output=$(mktemp)
@@ -252,7 +252,7 @@ run_migrations() {
 build_container() {
     echo ""
     log INFO "Сборка и запуск Docker контейнера"
-    cd loom/$SYSTEM_REPO
+    cd emu/$SYSTEM_REPO
 
     export $(cat env/.env.app env/.env.db env/.env.monitoring | xargs)
 
@@ -343,7 +343,7 @@ rollback_to_previous() {
     # Откат миграций
     echo ""
     log INFO "Откат миграций к версии $previous_tag"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local migration_output=$(mktemp)
 

@@ -58,7 +58,7 @@ load_server_config() {
     validate_env_var "PROD_DOMAIN" "$PROD_DOMAIN" "PROD_DOMAIN не настроен"
     validate_env_var "PROD_HOST" "$PROD_HOST" "PROD_HOST не настроен"
     validate_env_var "PROD_PASSWORD" "$PROD_PASSWORD" "PROD_PASSWORD не настроен"
-    validate_env_var "LOOM_RELEASE_TG_BOT_PREFIX" "$LOOM_RELEASE_TG_BOT_PREFIX" "LOOM_RELEASE_TG_BOT_PREFIX не настроен"
+    validate_env_var "EMU_RELEASE_TG_BOT_PREFIX" "$EMU_RELEASE_TG_BOT_PREFIX" "EMU_RELEASE_TG_BOT_PREFIX не настроен"
 
     echo "✅ Все обязательные переменные присутствуют"
 
@@ -85,15 +85,15 @@ load_server_config() {
     export_to_github_env "PROD_DOMAIN" "$PROD_DOMAIN"
 
     # Экспорт конфигурации API
-    export_to_github_env "LOOM_RELEASE_TG_BOT_PREFIX" "$LOOM_RELEASE_TG_BOT_PREFIX"
+    export_to_github_env "EMU_RELEASE_TG_BOT_PREFIX" "$EMU_RELEASE_TG_BOT_PREFIX"
 
     # Экспорт префиксов сервисов (для возможного использования)
-    export_to_github_env "LOOM_TG_BOT_PREFIX" "$LOOM_TG_BOT_PREFIX"
-    export_to_github_env "LOOM_ACCOUNT_PREFIX" "$LOOM_ACCOUNT_PREFIX"
-    export_to_github_env "LOOM_AUTHORIZATION_PREFIX" "$LOOM_AUTHORIZATION_PREFIX"
-    export_to_github_env "LOOM_EMPLOYEE_PREFIX" "$LOOM_EMPLOYEE_PREFIX"
-    export_to_github_env "LOOM_ORGANIZATION_PREFIX" "$LOOM_ORGANIZATION_PREFIX"
-    export_to_github_env "LOOM_CONTENT_PREFIX" "$LOOM_CONTENT_PREFIX"
+    export_to_github_env "EMU_TG_BOT_PREFIX" "$EMU_TG_BOT_PREFIX"
+    export_to_github_env "EMU_ACCOUNT_PREFIX" "$EMU_ACCOUNT_PREFIX"
+    export_to_github_env "EMU_AUTHORIZATION_PREFIX" "$EMU_AUTHORIZATION_PREFIX"
+    export_to_github_env "EMU_EMPLOYEE_PREFIX" "$EMU_EMPLOYEE_PREFIX"
+    export_to_github_env "EMU_ORGANIZATION_PREFIX" "$EMU_ORGANIZATION_PREFIX"
+    export_to_github_env "EMU_CONTENT_PREFIX" "$EMU_CONTENT_PREFIX"
 
     echo "✅ Переменные экспортированы"
 

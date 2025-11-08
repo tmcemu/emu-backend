@@ -75,7 +75,7 @@ log() {
 save_current_state() {
     echo ""
     log INFO "Сохранение текущего состояния"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local current_ref=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD)
     log INFO "Текущее состояние: $current_ref"
@@ -93,7 +93,7 @@ save_current_state() {
 rollback_migrations() {
     echo ""
     log INFO "Откат миграций к версии $TARGET_TAG"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     # Создаем временный файл для вывода миграций
     local migration_output=$(mktemp)
@@ -138,7 +138,7 @@ rollback_migrations() {
 rebuild_container_for_rollback() {
     echo ""
     log INFO "Переключение на версию $TARGET_TAG"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     git fetch --tags >> "$LOG_FILE" 2>&1
 
@@ -155,7 +155,7 @@ rebuild_container_for_rollback() {
     cd
 
     log INFO "Пересборка контейнера для отката"
-    cd loom/$SYSTEM_REPO
+    cd emu/$SYSTEM_REPO
 
     export $(cat env/.env.app env/.env.db env/.env.monitoring | xargs)
 
@@ -227,7 +227,7 @@ wait_for_health_after_rollback() {
 restore_to_original() {
     echo ""
     log INFO "Восстановление исходной версии"
-    cd loom/$SERVICE_NAME
+    cd emu/$SERVICE_NAME
 
     local previous_ref=$(cat /tmp/${SERVICE_NAME}_rollback_previous.txt 2>/dev/null || echo "")
 

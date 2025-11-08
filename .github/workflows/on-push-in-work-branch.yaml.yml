@@ -10,7 +10,7 @@ on:
 
 env:
     SERVICE_NAME: ${{ github.event.repository.name }}
-    SYSTEM_REPO: loom-system
+    SYSTEM_REPO: emu-system
     BRANCH_NAME: ${{ github.ref_name }}
     AUTHOR_NAME: ${{ github.actor }}
 

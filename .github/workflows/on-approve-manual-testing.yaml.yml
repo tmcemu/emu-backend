@@ -14,7 +14,7 @@ on:
 
 env:
     SERVICE_NAME: ${{ github.event.repository.name }}
-    SYSTEM_REPO: loom-system
+    SYSTEM_REPO: emu-system
     TAG_NAME: ${{ github.event.inputs.release_tag }}
     RELEASE_ID: ${{ github.event.inputs.release_id }}
 

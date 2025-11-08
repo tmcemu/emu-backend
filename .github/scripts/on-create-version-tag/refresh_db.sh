@@ -60,12 +60,12 @@ refresh_all_databases() {
 
     # Определение всех сервисов для обновления
     local services=(
-        "$LOOM_TG_BOT_PREFIX:TG Bot"
-        "$LOOM_ACCOUNT_PREFIX:Account"
-        "$LOOM_AUTHORIZATION_PREFIX:Authorization"
-        "$LOOM_EMPLOYEE_PREFIX:Employee"
-        "$LOOM_ORGANIZATION_PREFIX:Organization"
-        "$LOOM_CONTENT_PREFIX:Content"
+        "$EMU_TG_BOT_PREFIX:TG Bot"
+        "$EMU_ACCOUNT_PREFIX:Account"
+        "$EMU_AUTHORIZATION_PREFIX:Authorization"
+        "$EMU_EMPLOYEE_PREFIX:Employee"
+        "$EMU_ORGANIZATION_PREFIX:Organization"
+        "$EMU_CONTENT_PREFIX:Content"
     )
 
     local total=${#services[@]}
