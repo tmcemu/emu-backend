@@ -1,5 +1,5 @@
 from fastapi import Request, UploadFile, Form
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from internal import interface
 from internal.controller.http.handler.analysis.model import (
@@ -148,3 +148,81 @@ class AnalysisController(interface.IAnalysisController):
         analyses_dict = [analysis.to_dict() for analysis in analyses]
 
         return JSONResponse(status_code=200, content={"analyses": analyses_dict})
+
+    @auto_log()
+    @traced_method()
+    async def download_study_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        authorization_data = request.state.authorization_data
+        account_id = authorization_data.account_id
+        account_type = authorization_data.account_type
+
+        if account_id == 0:
+            return JSONResponse(status_code=403, content={"error": "Unauthorized"})
+
+        if account_type != "doctor":
+            return JSONResponse(status_code=403, content={"error": "Only doctors can download study files"})
+
+        try:
+            file_obj, content_type, filename = await self.analysis_service.get_analysis_file(aid, "study")
+
+            return StreamingResponse(
+                file_obj,
+                media_type=content_type,
+                headers={
+                    "Content-Disposition": f'attachment; filename="{filename}"'
+                }
+            )
+        except Exception as e:
+            return JSONResponse(status_code=404, content={"error": str(e)})
+
+    @auto_log()
+    @traced_method()
+    async def download_activity_diary(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        authorization_data = request.state.authorization_data
+        account_id = authorization_data.account_id
+        account_type = authorization_data.account_type
+
+        if account_id == 0:
+            return JSONResponse(status_code=403, content={"error": "Unauthorized"})
+
+        if account_type != "doctor":
+            return JSONResponse(status_code=403, content={"error": "Only doctors can download activity diary files"})
+
+        try:
+            file_obj, content_type, filename = await self.analysis_service.get_analysis_file(aid, "activity_diary")
+
+            return StreamingResponse(
+                file_obj,
+                media_type=content_type,
+                headers={
+                    "Content-Disposition": f'attachment; filename="{filename}"'
+                }
+            )
+        except Exception as e:
+            return JSONResponse(status_code=404, content={"error": str(e)})
+
+    @auto_log()
+    @traced_method()
+    async def download_conclusion_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        authorization_data = request.state.authorization_data
+        account_id = authorization_data.account_id
+        account_type = authorization_data.account_type
+
+        if account_id == 0:
+            return JSONResponse(status_code=403, content={"error": "Unauthorized"})
+
+        if account_type != "nurse":
+            return JSONResponse(status_code=403, content={"error": "Only nurses can download conclusion files"})
+
+        try:
+            file_obj, content_type, filename = await self.analysis_service.get_analysis_file(aid, "conclusion")
+
+            return StreamingResponse(
+                file_obj,
+                media_type=content_type,
+                headers={
+                    "Content-Disposition": f'attachment; filename="{filename}"'
+                }
+            )
+        except Exception as e:
+            return JSONResponse(status_code=404, content={"error": str(e)})

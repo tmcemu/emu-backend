@@ -103,3 +103,32 @@ class AnalysisService(interface.IAnalysisService):
     async def get_analyses_by_nurse(self, nurse_id: int) -> list[model.Analysis]:
         analyses = await self.analysis_repo.get_analyses_by_nurse(nurse_id)
         return analyses
+
+    @traced_method()
+    async def get_analysis_file(self, analysis_id: int, file_type: str) -> tuple[io.BytesIO, str, str]:
+        analyses = await self.analysis_repo.get_analysis_by_id(analysis_id)
+        if not analyses:
+            raise common.ErrAnalysisNotFound()
+
+        analysis = analyses[0]
+
+        # Определяем FID в зависимости от типа файла
+        if file_type == "study":
+            fid = analysis.study_file_fid
+            filename = f"study_{analysis_id}"
+        elif file_type == "activity_diary":
+            fid = analysis.activity_diary_image_fid
+            filename = f"activity_diary_{analysis_id}"
+        elif file_type == "conclusion":
+            fid = analysis.conclusion_file_fid
+            filename = f"conclusion_{analysis_id}"
+        else:
+            raise ValueError(f"Invalid file type: {file_type}")
+
+        if not fid:
+            raise common.ErrAnalysisNotFound()
+
+        # Скачиваем файл из storage
+        file_obj, content_type = await self.storage.download(fid, filename)
+
+        return file_obj, content_type, filename

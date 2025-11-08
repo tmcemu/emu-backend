@@ -140,6 +140,30 @@ def include_analysis_handlers(
         tags=["Analysis"],
     )
 
+    # Скачать файл study (врачи)
+    app.add_api_route(
+        prefix + "/analysis/study/{aid}",
+        analysis_controller.download_study_file,
+        methods=["GET"],
+        tags=["Analysis"],
+    )
+
+    # Скачать файл activity_diary (врачи)
+    app.add_api_route(
+        prefix + "/analysis/activity_diary/{aid}",
+        analysis_controller.download_activity_diary,
+        methods=["GET"],
+        tags=["Analysis"],
+    )
+
+    # Скачать файл conclusion (медсестры)
+    app.add_api_route(
+        prefix + "/analysis/conclusion/{aid}",
+        analysis_controller.download_conclusion_file,
+        methods=["GET"],
+        tags=["Analysis"],
+    )
+
 
 def include_db_handler(app: FastAPI, db: interface.IDB, prefix: str):
     app.add_api_route(prefix + "/table/create", create_table_handler(db), methods=["GET"])

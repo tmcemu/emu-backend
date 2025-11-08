@@ -1,8 +1,9 @@
 from abc import abstractmethod
 from typing import Protocol
+import io
 
 from fastapi import UploadFile, Form, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from internal import model
 from internal.controller.http.handler.analysis.model import (
@@ -47,6 +48,18 @@ class IAnalysisController(Protocol):
     async def get_analyses_by_nurse(self, request: Request,) -> JSONResponse:
         pass
 
+    @abstractmethod
+    async def download_study_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        pass
+
+    @abstractmethod
+    async def download_activity_diary(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        pass
+
+    @abstractmethod
+    async def download_conclusion_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+        pass
+
 
 class IAnalysisService(Protocol):
     @abstractmethod
@@ -77,6 +90,10 @@ class IAnalysisService(Protocol):
 
     @abstractmethod
     async def get_analyses_by_nurse(self, nurse_id: int) -> list[model.Analysis]:
+        pass
+
+    @abstractmethod
+    async def get_analysis_file(self, analysis_id: int, file_type: str) -> tuple[io.BytesIO, str, str]:
         pass
 
 
