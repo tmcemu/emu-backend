@@ -19,13 +19,17 @@ class AnalysisRepo(interface.IAnalysisRepo):
         nurse_id: int,
         analysis_type: str,
         study_file_fid: str,
+        study_file_original_name: str,
         activity_diary_image_fid: str | None,
+        activity_diary_original_name: str | None,
     ) -> int:
         args = {
             "nurse_id": nurse_id,
             "analysis_type": analysis_type,
             "study_file_fid": study_file_fid,
+            "study_file_original_name": study_file_original_name,
             "activity_diary_image_fid": activity_diary_image_fid or "",
+            "activity_diary_original_name": activity_diary_original_name or "",
         }
 
         analysis_id = await self.db.insert(create_analysis, args)
@@ -69,9 +73,10 @@ class AnalysisRepo(interface.IAnalysisRepo):
         await self.db.update(set_rejection, args)
 
     @traced_method()
-    async def set_conclusion(self, analysis_id: int, conclusion_file_fid: str) -> None:
+    async def set_conclusion(self, analysis_id: int, conclusion_file_fid: str, conclusion_file_original_name: str) -> None:
         args = {
             "analysis_id": analysis_id,
             "conclusion_file_fid": conclusion_file_fid,
+            "conclusion_file_original_name": conclusion_file_original_name,
         }
         await self.db.update(set_conclusion, args)

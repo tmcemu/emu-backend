@@ -22,12 +22,15 @@ CREATE TABLE IF NOT EXISTS analyses (
 
     nurse_id INTEGER,
     doctor_id INTEGER,
-    
+
     analysis_type TEXT NOT NULL,
     study_file_fid TEXT NOT NULL,
+    study_file_original_name TEXT DEFAULT '',
     activity_diary_image_fid TEXT DEFAULT '',
+    activity_diary_original_name TEXT DEFAULT '',
     status TEXT NOT NULL,
     conclusion_file_fid TEXT DEFAULT '',
+    conclusion_file_original_name TEXT DEFAULT '',
     rejection_comment TEXT DEFAULT '',
 
     started_at TIMESTAMP,

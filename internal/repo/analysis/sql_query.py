@@ -3,9 +3,12 @@ INSERT INTO analyses (
     nurse_id,
     analysis_type,
     study_file_fid,
+    study_file_original_name,
     activity_diary_image_fid,
+    activity_diary_original_name,
     status,
     conclusion_file_fid,
+    conclusion_file_original_name,
     rejection_comment,
     doctor_id,
     started_at,
@@ -17,8 +20,11 @@ VALUES (
     :nurse_id,
     :analysis_type,
     :study_file_fid,
+    :study_file_original_name,
     :activity_diary_image_fid,
+    :activity_diary_original_name,
     'pending',
+    '',
     '',
     '',
     0,
@@ -67,6 +73,7 @@ WHERE id = :analysis_id;
 set_conclusion = """
 UPDATE analyses
 SET conclusion_file_fid = :conclusion_file_fid,
+    conclusion_file_original_name = :conclusion_file_original_name,
     finished_at = CURRENT_TIMESTAMP,
     status = 'completed',
     updated_at = CURRENT_TIMESTAMP

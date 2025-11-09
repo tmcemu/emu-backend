@@ -28,21 +28,26 @@ class AnalysisService(interface.IAnalysisService):
     ) -> int:
         study_file_content = await study_file.read()
         study_file_bytes = io.BytesIO(study_file_content)
-        study_file_result = await self.storage.upload(study_file_bytes, study_file.filename or "study_file")
+        study_file_original_name = study_file.filename or "study_file"
+        study_file_result = await self.storage.upload(study_file_bytes, study_file_original_name)
         study_file_fid = study_file_result.fid
 
         activity_diary_fid = None
+        activity_diary_original_name = None
         if activity_diary_image:
             diary_content = await activity_diary_image.read()
             diary_bytes = io.BytesIO(diary_content)
-            diary_result = await self.storage.upload(diary_bytes, activity_diary_image.filename or "activity_diary")
+            activity_diary_original_name = activity_diary_image.filename or "activity_diary"
+            diary_result = await self.storage.upload(diary_bytes, activity_diary_original_name)
             activity_diary_fid = diary_result.fid
 
         analysis_id = await self.analysis_repo.create_analysis(
             nurse_id=nurse_id,
             analysis_type=analysis_type,
             study_file_fid=study_file_fid,
+            study_file_original_name=study_file_original_name,
             activity_diary_image_fid=activity_diary_fid,
+            activity_diary_original_name=activity_diary_original_name,
         )
 
         return analysis_id
@@ -89,10 +94,11 @@ class AnalysisService(interface.IAnalysisService):
 
         conclusion_content = await conclusion_file.read()
         conclusion_bytes = io.BytesIO(conclusion_content)
-        conclusion_result = await self.storage.upload(conclusion_bytes, conclusion_file.filename or "conclusion")
+        conclusion_original_name = conclusion_file.filename or "conclusion"
+        conclusion_result = await self.storage.upload(conclusion_bytes, conclusion_original_name)
         conclusion_fid = conclusion_result.fid
 
-        await self.analysis_repo.set_conclusion(analysis_id, conclusion_fid)
+        await self.analysis_repo.set_conclusion(analysis_id, conclusion_fid, conclusion_original_name)
 
     @traced_method()
     async def get_all_analyses(self) -> list[model.Analysis]:
@@ -115,13 +121,13 @@ class AnalysisService(interface.IAnalysisService):
         # Определяем FID в зависимости от типа файла
         if file_type == "study":
             fid = analysis.study_file_fid
-            filename = f"study_{analysis_id}"
+            filename = analysis.study_file_original_name
         elif file_type == "activity_diary":
             fid = analysis.activity_diary_image_fid
-            filename = f"activity_diary_{analysis_id}"
+            filename = analysis.activity_diary_original_name
         elif file_type == "conclusion":
             fid = analysis.conclusion_file_fid
-            filename = f"conclusion_{analysis_id}"
+            filename = analysis.conclusion_file_original_name
         else:
             raise ValueError(f"Invalid file type: {file_type}")
 

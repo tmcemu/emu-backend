@@ -104,7 +104,9 @@ class IAnalysisRepo(Protocol):
             nurse_id: int,
             analysis_type: str,
             study_file_fid: str,
+            study_file_original_name: str,
             activity_diary_image_fid: str | None,
+            activity_diary_original_name: str | None,
     ) -> int:
         pass
 
@@ -129,5 +131,5 @@ class IAnalysisRepo(Protocol):
         pass
 
     @abstractmethod
-    async def set_conclusion(self, analysis_id: int, conclusion_file_fid: str) -> None:
+    async def set_conclusion(self, analysis_id: int, conclusion_file_fid: str, conclusion_file_original_name: str) -> None:
         pass
