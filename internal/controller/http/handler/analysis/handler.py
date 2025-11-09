@@ -151,7 +151,7 @@ class AnalysisController(interface.IAnalysisController):
 
     @auto_log()
     @traced_method()
-    async def download_study_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_study_file(self, request: Request, aid: int):
         authorization_data = request.state.authorization_data
         account_id = authorization_data.account_id
         account_type = authorization_data.account_type
@@ -177,7 +177,7 @@ class AnalysisController(interface.IAnalysisController):
 
     @auto_log()
     @traced_method()
-    async def download_activity_diary(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_activity_diary(self, request: Request, aid: int):
         authorization_data = request.state.authorization_data
         account_id = authorization_data.account_id
         account_type = authorization_data.account_type
@@ -203,7 +203,7 @@ class AnalysisController(interface.IAnalysisController):
 
     @auto_log()
     @traced_method()
-    async def download_conclusion_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_conclusion_file(self, request: Request, aid: int):
         authorization_data = request.state.authorization_data
         account_id = authorization_data.account_id
         account_type = authorization_data.account_type

@@ -3,7 +3,7 @@ from typing import Protocol
 import io
 
 from fastapi import UploadFile, Form, Request
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import JSONResponse
 
 from internal import model
 from internal.controller.http.handler.analysis.model import (
@@ -49,15 +49,15 @@ class IAnalysisController(Protocol):
         pass
 
     @abstractmethod
-    async def download_study_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_study_file(self, request: Request, aid: int):
         pass
 
     @abstractmethod
-    async def download_activity_diary(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_activity_diary(self, request: Request, aid: int):
         pass
 
     @abstractmethod
-    async def download_conclusion_file(self, request: Request, aid: int) -> StreamingResponse | JSONResponse:
+    async def download_conclusion_file(self, request: Request, aid: int):
         pass
 
 
