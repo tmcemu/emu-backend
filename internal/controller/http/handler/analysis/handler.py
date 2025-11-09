@@ -1,5 +1,6 @@
 from fastapi import Request, UploadFile, Form
 from fastapi.responses import JSONResponse, StreamingResponse
+from urllib.parse import quote
 
 from internal import interface
 from internal.controller.http.handler.analysis.model import (
@@ -8,6 +9,27 @@ from internal.controller.http.handler.analysis.model import (
 )
 from pkg.log_wrapper import auto_log
 from pkg.trace_wrapper import traced_method
+
+
+def encode_content_disposition_filename(filename: str) -> str:
+    """
+    Encode filename for Content-Disposition header according to RFC 5987.
+    Supports non-ASCII characters (including Russian/Cyrillic).
+
+    Args:
+        filename: The original filename (may contain Unicode characters)
+
+    Returns:
+        Properly encoded Content-Disposition header value
+    """
+    # URL-encode the filename for RFC 5987
+    encoded_filename = quote(filename, safe='')
+
+    # Create ASCII fallback (replace non-ASCII with underscores)
+    ascii_filename = filename.encode('ascii', errors='replace').decode('ascii').replace('?', '_')
+
+    # RFC 5987 format: filename*=UTF-8''<encoded>; filename="<ascii-fallback>"
+    return f"attachment; filename=\"{ascii_filename}\"; filename*=UTF-8''{encoded_filename}"
 
 
 class AnalysisController(interface.IAnalysisController):
@@ -169,7 +191,7 @@ class AnalysisController(interface.IAnalysisController):
                 file_obj,
                 media_type=content_type,
                 headers={
-                    "Content-Disposition": f'attachment; filename="{filename}"'
+                    "Content-Disposition": encode_content_disposition_filename(filename)
                 }
             )
         except Exception as e:
@@ -195,7 +217,7 @@ class AnalysisController(interface.IAnalysisController):
                 file_obj,
                 media_type=content_type,
                 headers={
-                    "Content-Disposition": f'attachment; filename="{filename}"'
+                    "Content-Disposition": encode_content_disposition_filename(filename)
                 }
             )
         except Exception as e:
@@ -221,7 +243,7 @@ class AnalysisController(interface.IAnalysisController):
                 file_obj,
                 media_type=content_type,
                 headers={
-                    "Content-Disposition": f'attachment; filename="{filename}"'
+                    "Content-Disposition": encode_content_disposition_filename(filename)
                 }
             )
         except Exception as e:
