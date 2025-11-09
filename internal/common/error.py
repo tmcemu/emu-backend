@@ -18,6 +18,11 @@ class ErrUnauthorized(Exception):
         return "Unauthorized"
 
 
+class ErrForbidden(Exception):
+    def __str__(self):
+        return "Forbidden"
+
+
 class ErrInvalidPassword(Exception):
     def __str__(self):
         return "Invalid password"

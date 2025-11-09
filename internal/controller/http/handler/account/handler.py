@@ -2,6 +2,7 @@ from fastapi import Request
 from fastapi.responses import JSONResponse
 
 from internal import interface
+from internal.common.error import ErrForbidden
 from internal.controller.http.handler.account.model import (
     ChangePasswordBody,
     LoginBody,
@@ -16,14 +17,20 @@ class AccountController(interface.IAccountController):
         self,
         tel: interface.ITelemetry,
         account_service: interface.IAccountService,
+        interserver_secret_key: str,
     ):
         self.tracer = tel.tracer()
         self.logger = tel.logger()
         self.account_service = account_service
+        self.interserver_secret_key = interserver_secret_key
 
     @auto_log()
     @traced_method()
     async def register(self, body: RegisterBody) -> JSONResponse:
+        # Validate interserver secret key
+        if body.interserver_secret_key != self.interserver_secret_key:
+            raise ErrForbidden()
+
         authorization_data = await self.account_service.register(
             login=body.login,
             password=body.password,

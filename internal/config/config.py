@@ -36,11 +36,12 @@ class Config:
 
         # Настройки авторизации
         self.emu_authorization_host = "localhost"
-        self.emu_authorization_port = "8004"
+        self.emu_authorization_port = 8004
         self.password_secret_key = os.getenv("EMU_PASSWORD_SECRET_KEY", "default-secret-key-change-me")
 
         # Настройки JWT
         self.jwt_secret_key = os.getenv("EMU_JWT_SECRET_KEY", "default-jwt-secret-key-change-me")
+        self.interserver_secret_key = os.getenv("EMU_INTERSERVER_SECRET_KEY", "default-jwt-secret-key-change-me")
 
         # Настройки WeedFS (для хранения файлов)
         self.weedfs_host = os.getenv("EMU_WEED_MASTER_CONTAINER_NAME", "localhost")

@@ -85,7 +85,7 @@ analysis_service = AnalysisService(
 )
 
 # Инициализация контроллеров
-account_controller = AccountController(tel, account_service)
+account_controller = AccountController(tel, account_service, cfg.interserver_secret_key)
 authorization_controller = AuthorizationController(tel, authorization_service, cfg.prefix)
 analysis_controller = AnalysisController(tel, analysis_service)
 

@@ -5,6 +5,7 @@ class RegisterBody(BaseModel):
     login: str
     password: str
     account_type: str
+    interserver_secret_key: str
 
 
 class LoginBody(BaseModel):
